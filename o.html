@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yogesh Infotech and Business</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.4.1/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("V24pe7ZFoCXymFjqz");
+    })();
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header, footer { background: #007bff; color: white; padding: 10px; text-align: center; }
+    nav a { margin: 0 10px; color: white; text-decoration: none; }
+    .content { padding: 20px; }
+    .btn {
+      background: green; color: white;
+      padding: 8px 14px; text-decoration: none;
+      border: none; border-radius: 5px; cursor: pointer; margin: 5px;
+    }
+    .hidden { display: none; }
+    .section { margin-top: 30px; }
+    ul { margin-top: 10px; padding-left: 20px; }
+    li { margin-bottom: 8px; }
+    form { margin-top: 20px; }
+    input, textarea {
+      display: block;
+      margin-bottom: 10px;
+      padding: 8px;
+      width: 100%;
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Yogesh Infotech and Business</h1>
+  <p>Mobile Repair | Accessories | Trusted Service</p>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Services</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+</header>
+
+<div class="content">
+  <div class="section">
+    <h2>🔧 Mobile Repair</h2>
+    <button class="btn" onclick="toggleSection('mb')">Select Mobile Brand</button>
+    <div id="mbBrands" class="hidden"></div>
+    <div id="mbModels" class="hidden"></div>
+    <div id="mbProblems" class="hidden"></div>
+  </div>
+</div>
+
+<div id="userForm" class="content hidden">
+  <h3>Submit Your Details</h3>
+  <form id="repairForm">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <input type="text" name="phone" placeholder="Phone Number" required>
+    <input type="text" name="location" placeholder="Your Location" required>
+    <input type="hidden" name="problem_info" id="problem_info">
+    <textarea name="problem_description" placeholder="Enter problem here..." required></textarea>
+    <button class="btn" type="submit">Submit</button>
+  </form>
+  <p id="formMessage"></p>
+</div>
+
+<footer>
+  &copy; 2025 Yogesh Infotech. All Rights Reserved.
+</footer>
+
+<script>
+const mobileModels = {
+  APPLE: ["iPhone 4", "iPhone 4S", "iPhone 5", "iPhone 5s", "iPhone 5c", "iPhone 6", "iPhone 6 Plus", "iPhone 6s", "iPhone 6s Plus", "iPhone SE (1st gen)", "iPhone 7", "iPhone 7 Plus", "iPhone 8", "iPhone 8 Plus", "iPhone X", "iPhone XR", "iPhone XS", "iPhone XS Max", "iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone SE (2nd gen)", "iPhone 12", "iPhone 12 mini", "iPhone 12 Pro", "iPhone 12 Pro Max", "iPhone 13", "iPhone 13 mini", "iPhone 13 Pro", "iPhone 13 Pro Max", "iPhone SE (3rd gen)", "iPhone 14", "iPhone 14 Plus", "iPhone 14 Pro", "iPhone 14 Pro Max", "iPhone 15", "iPhone 15 Plus", "iPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16", "iPhone 16 Plus", "iPhone 16 Pro", "iPhone 16 Pro Max"],
+  SAMSUNG: ["Galaxy S", "Galaxy S II", "Galaxy S III", "Galaxy S4", "Galaxy S5", "Galaxy S6", "Galaxy S6 Edge", "Galaxy S7", "Galaxy S7 Edge", "Galaxy S8", "Galaxy S8 Plus", "Galaxy S9", "Galaxy S9 Plus", "Galaxy S10", "Galaxy S10e", "Galaxy S10 Plus", "Galaxy S20", "Galaxy S20 Plus", "Galaxy S20 Ultra", "Galaxy S21", "Galaxy S21 Plus", "Galaxy S21 Ultra", "Galaxy S22", "Galaxy S22 Plus", "Galaxy S22 Ultra", "Galaxy S23", "Galaxy S23 Plus", "Galaxy S23 Ultra", "Galaxy M13", "Galaxy M14", "Galaxy A50", "Galaxy A51", "Galaxy A52", "Galaxy A53", "Galaxy A54"],
+  MI: ["Mi 4", "Mi 5", "Mi 6", "Mi 8", "Mi 9", "Mi 10", "Mi 10i", "Mi 11", "Mi 11X", "Mi 11 Ultra", "Redmi Note 7", "Redmi Note 8", "Redmi Note 9", "Redmi Note 10", "Redmi Note 10 Pro", "Redmi Note 11", "Redmi Note 12", "Xiaomi 11i", "Xiaomi 12", "Xiaomi 13", "Xiaomi 14"],
+  VIVO: ["Vivo Y1s", "Vivo Y12", "Vivo Y15", "Vivo Y20", "Vivo Y21", "Vivo Y30", "Vivo Y33s", "Vivo Y50", "Vivo Y51", "Vivo Y53s", "Vivo Y56", "Vivo Y73", "Vivo Y100", "Vivo V15", "Vivo V17", "Vivo V19", "Vivo V20", "Vivo V21", "Vivo V23", "Vivo V25", "Vivo V27", "Vivo V29", "Vivo V30", "Vivo X50", "Vivo X60", "Vivo X70", "Vivo X80", "Vivo X90", "Vivo X100", "Vivo X Fold", "Vivo X Note"],
+  POCO: ["F1", "F2 Pro", "F3", "F4", "F5", "X2", "X3", "X3 Pro", "X4", "X5", "X6", "M2", "M3", "M4", "M5", "M6", "C3", "C31", "C50"],
+  REALME: ["Realme 3", "Realme 3 Pro", "Realme 5", "Realme 5 Pro", "Realme 6", "Realme 6 Pro", "Realme 7", "Realme 7 Pro", "Realme 8", "Realme 8 Pro", "Realme 9", "Realme 9i", "Realme 9 Pro", "Realme Narzo", "Realme Narzo 20", "Realme Narzo 30", "Realme Narzo 50"],
+  ONEPLUS: ["OnePlus One", "OnePlus 2", "OnePlus X", "OnePlus 3", "OnePlus 3T", "OnePlus 5", "OnePlus 5T", "OnePlus 6", "OnePlus 6T", "OnePlus 7", "OnePlus 7 Pro", "OnePlus 7T", "OnePlus 7T Pro", "OnePlus 8", "OnePlus 8 Pro", "OnePlus 8T", "OnePlus 9", "OnePlus 9 Pro", "OnePlus 9R", "OnePlus 10 Pro", "OnePlus 10T", "OnePlus 11", "OnePlus 11R", "OnePlus 12"],
+  MOTOROLA: ["Moto E", "Moto E3", "Moto E4", "Moto E5", "Moto E6", "Moto G", "Moto G2", "Moto G3", "Moto G4", "Moto G5", "Moto G6", "Moto G7", "Moto G8", "Moto G9", "Moto G10", "Moto G30", "Moto G40", "Moto G60", "Moto G71", "Moto G82", "Moto Edge", "Moto Edge 20", "Moto Edge 30", "Moto Edge 40"],
+  NOKIA: ["Nokia 1", "Nokia 2", "Nokia 3", "Nokia 4.2", "Nokia 5", "Nokia 5.1 Plus", "Nokia 6", "Nokia 6.1", "Nokia 6.2", "Nokia 7 Plus", "Nokia 7.1", "Nokia 7.2", "Nokia 8", "Nokia 8.1", "Nokia 8.3", "Nokia 9 PureView", "Nokia C1", "Nokia C3", "Nokia C10", "Nokia G10", "Nokia G20", "Nokia G21", "Nokia X10", "Nokia X20"],
+  INFINIX: ["Infinix Note 10", "Infinix Hot 10", "Infinix Smart 7", "Infinix Zero 5G"],
+  TECNO: ["Tecno Spark 7", "Tecno Pova 3", "Tecno Camon 19", "Tecno Phantom X"],
+  LAVA: ["Lava Z2", "Lava Z4", "Lava Blaze 5G", "Lava Agni 2"],
+  MICROMAX: ["Micromax IN Note 1", "Micromax IN 2b", "Micromax Bharat 5", "Micromax Canvas 6"]
+};
+
+function toggleSection(type) {
+  document.getElementById(type + 'Brands').classList.toggle('hidden');
+  if(type === 'mb') loadBrands('mb', mobileModels);
+}
+
+function loadBrands(type, data) {
+  const brands = Object.keys(data);
+  const container = document.getElementById(type + 'Brands');
+  let html = '<h4>Select Brand:</h4>';
+  brands.forEach(b => {
+    html += `<button class="btn" onclick="nextStep('${type}','${b}')">${b}</button>`;
+  });
+  container.innerHTML = html;
+}
+
+function nextStep(type, brand) {
+  const modelsDiv = document.getElementById(type + 'Models');
+  const problemsDiv = document.getElementById(type + 'Problems');
+  let brandModels = mobileModels[brand] || [];
+  let html = '<h4>Select Model:</h4>';
+  brandModels.forEach(model => {
+    html += `<button class="btn" onclick="showProblems('${type}', '${brand}', '${model}')">${model}</button>`;
+  });
+  modelsDiv.innerHTML = html;
+  modelsDiv.classList.remove('hidden');
+  problemsDiv.classList.add('hidden');
+}
+
+function showProblems(type, brand, model) {
+  const problemsDiv = document.getElementById(type + 'Problems');
+  const infoPrefix = `${type.toUpperCase()} | ${brand} | ${model}`;
+  let html = `
+    <h4>Common Problems:</h4>
+    <form id="problemSelectorForm">
+      <label><input type="checkbox" name="problem" value="Screen Damage"> Screen Damage</label><br>
+      <label><input type="checkbox" name="problem" value="Hanging"> Hanging</label><br>
+      <label><input type="checkbox" name="problem" value="Camera Problem"> Camera Problem</label><br>
+      <label><input type="checkbox" name="problem" value="Battery Drain"> Battery Drain</label><br>
+      <label><input type="checkbox" name="problem" value="Touch Not Working"> Touch Not Working</label><br>
+      <label><input type="checkbox" name="problem" value="Speaker Problem"> Speaker Problem</label><br>
+      <label><input type="checkbox" name="problem" value="Software Issue"> Software Issue</label><br>
+      <label><input type="checkbox" name="problem" value="Water Damage"> Water Damage</label><br>
+      <label><input type="checkbox" name="problem" value="Charging Problem"> Charging Problem</label><br>
+      <label><input type="checkbox" name="problem" value="Fingerprint Not Working"> Fingerprint Not Working</label><br>
+      <label><input type="checkbox" name="problem" value="Face Unlock Problem"> Face Unlock Problem</label><br><br>
+      <button class="btn" type="button" onclick="submitProblemSelection('${infoPrefix}')">Continue</button>
+    </form>
+  `;
+  problemsDiv.innerHTML = html;
+  problemsDiv.classList.remove('hidden');
+}
+
+function submitProblemSelection(infoPrefix) {
+  const selected = Array.from(document.querySelectorAll('input[name="problem"]:checked'))
+    .map(cb => cb.value);
+  const problems = selected.length ? ` | Problems: ${selected.join(', ')}` : '';
+  document.getElementById('problem_info').value = infoPrefix + problems;
+  document.getElementById('userForm').classList.remove('hidden');
+  document.getElementById('userForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+const form = document.getElementById("repairForm");
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+  emailjs.sendForm("service_hfuutyz", "template_bz6pbo6", this, "V24pe7ZFoCXymFjqz")
+    .then(() => {
+      document.getElementById("formMessage").textContent = "✅ Your request has been sent successfully!";
+      form.reset();
+      document.getElementById("userForm").scrollIntoView({ behavior: 'smooth' });
+    }, (error) => {
+      document.getElementById("formMessage").textContent = "❌ Failed to send. Please try again.";
+      console.error("EmailJS Error:", error);
+    });
+});
+</script>
+
+</body>
+</html>
